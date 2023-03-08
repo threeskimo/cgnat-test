@@ -13,6 +13,6 @@ Run directly from the command prompt and it will perform a test to determine if 
 cgnat-test.bat
 ```
 
->**NOTE:** This script is not 100% accurate, as the test it performs is pretty basic and can't account for all different types of network configurations.
+>**NOTE:** This script is not 100% accurate, as the test it performs is pretty basic and can't account for all different types of network configurations. It does, however, work pretty well for home networking use cases.
 
 [^1]: https://en.wikipedia.org/wiki/Carrier-grade_NAT#:~:text=Carrier%2Dgrade%20NAT%20usually,configured%20by%20the%20consumer.
