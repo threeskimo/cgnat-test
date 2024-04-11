@@ -1,16 +1,16 @@
 @echo off
 
-echo Finding public IP...
+echo [+] Finding public IP...
 
 :: Find public IP using powershell Invoke-WebRequest cmdlet
 for /f "tokens=* delims= " %%a in ('powershell -command "(Invoke-WebRequest ifconfig.me).Content.Trim()" ') do set "dest=%%a"
-echo ^>^> Found: %dest%
+echo [+] Found: %dest%
 
-echo Performing tracert...
+echo [+] Performing tracert...
 
 :: Perform a tracert and extract the first hop's destination IP
 FOR /F "tokens=1,8,9 delims= " %%A IN ('tracert /d /h 1 %Dest%') DO IF %%A GEQ 1 IF %%A LEQ 1 ( set hop=%%B )
-echo ^>^> First Hop: %hop%
+echo [+] First Hop: %hop%
 
 :: Compare the public IP to the first hop of the tracert. If they are the same, most likely no CGNAT! else BAD!
 call :Comparator %dest% %hop%
@@ -18,9 +18,9 @@ echo:
 
 :: Return result of test
 if %retVal%==1 (
-   echo GOOD NEWS! You appear to NOT be behind a CGNAT!
+   echo [+] GOOD NEWS! You appear to NOT be behind a CGNAT!
 ) else (
-   echo BAD NEWS: You may be behind a CGNAT!
+   echo [-] BAD NEWS: You may be behind a CGNAT!
 )
 
 :Comparator
