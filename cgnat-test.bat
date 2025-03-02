@@ -2,14 +2,26 @@
 
 echo [+] Finding public IP...
 
-:: Find public IP using powershell Invoke-WebRequest cmdlet
-for /f "tokens=* delims= " %%a in ('powershell -command "(Invoke-WebRequest ifconfig.me).Content.Trim()" ') do set "dest=%%a"
+:: Find public IP
+for /f "tokens=* delims= " %%a in ('curl -s -4 ifconfig.me') do set dest=%%a
+
+if not defined dest (
+    echo [-] ERROR: Could not fetch public IP.
+    exit /b 1
+)
+
 echo [+] Found: %dest%
 
 echo [+] Performing tracert...
 
 :: Perform a tracert and extract the first hop's destination IP
 FOR /F "tokens=1,8,9 delims= " %%A IN ('tracert /d /h 1 %Dest%') DO IF %%A GEQ 1 IF %%A LEQ 1 ( set hop=%%B )
+
+if not defined hop (
+    echo [-] ERROR: Could not extract the first hop from the tracert.
+    exit /b 1
+)
+
 echo [+] First Hop: %hop%
 
 :: Compare the public IP to the first hop of the tracert. If they are the same, most likely no CGNAT! else BAD!
